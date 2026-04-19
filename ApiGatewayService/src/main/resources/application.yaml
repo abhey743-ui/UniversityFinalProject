@@ -1,0 +1,117 @@
+spring:
+  application:
+    name: ApiGatewayService
+
+  security:
+    oauth2:
+      client:
+        registration:
+          okta:
+            client-id: 0oaza4nsu9P9io8gP697
+            client-secret: Ny9eil5OSFEEn_9aqUdTacwJFBNQ-CMv5zYZPdgP5LUtOX7_i88rW0gFAxkN2kih
+            scope: openid, profile, email
+            redirect-uri: "{baseUrl}/login/oauth2/code/okta"
+            authorization-grant-type: authorization_code
+        provider:
+          okta:
+            authorization-uri: https://integrator-7592375.okta.com/oauth2/default/v1/authorize
+            token-uri: https://integrator-7592375.okta.com/oauth2/default/v1/token
+            user-info-uri: https://integrator-7592375.okta.com/oauth2/default/v1/userinfo
+            jwk-set-uri: https://integrator-7592375.okta.com/oauth2/default/v1/keys
+
+  cloud:
+    gateway:
+      routes:
+        - id: BUY
+          uri: lb://PAYMENTGATEWAY
+          predicates:
+              - Path=/buy/**
+        - id: TOKENCHECK
+          uri: lb://TOKENCHECKSERVICE
+          predicates:
+            - Path=//validate/token
+        - id: USER
+          uri: lb://USER
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1
+
+        - id: AUTH
+          uri: lb://AUTHSERVICE
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+
+##        - id: AUTH2
+##          uri: lb://AUTHSERVICE
+##          predicates:
+##              - Path=/login/oauth2/code/google
+#
+#
+#          filters:
+#            - StripPrefix=1
+
+        - id: TokenVerification
+          uri: lb://TOKENCHECKSERVICE
+          predicates:
+            - Path=/token/**
+          filters:
+            - StripPrefix=1
+        - id: PRODUCTS
+          uri: lb://PRODUCTSERVICE
+          predicates:
+            - Path=/products/**
+
+        - id: BASKETSERVICE
+          uri: lb://BASKETSERVICE
+          predicates:
+              - Path=/basket/**
+          filters:
+            - StripPrefix=1
+
+        - id: PRODUCTS_REVIEWS
+          uri: lb://PRODUCTSERVICE
+          predicates:
+            - Path=/reviews/**
+
+        - id: PRODUCTMANAGEMENT
+          uri: lb://PRODUCTMANAGEMENT
+          predicates:
+            - Path=/management/**
+          filters:
+
+            - StripPrefix=1
+
+
+
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone:  http://localhost:8761/eureka
+
+
+
+server:
+  port: 8082
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: changeit
+    key-store-type: PKCS12
+
+
+
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.web: DEBUG
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+    reactor.netty.http.server: DEBUG
+

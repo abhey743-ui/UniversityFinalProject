@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: ProductService
+  data:
+    mongodb:
+      uri: mongodb+srv://abhey743_db_user:eO1hGvCJeJVkgXTa@cluster0.yibflne.mongodb.net/?appName=Cluster0
+      database: Products
+
+server:
+  port: 8085
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.web: DEBUG
+    org.springframework.security.oauth2: DEBUG
