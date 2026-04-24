@@ -2,24 +2,25 @@ spring:
   application:
     name: AuthService
   security:
-      oauth2:
-        client:
-          registration:
-            google:
-              client-id: 1028454795634-3k3455a2n8ute9t28kn2cqriimombg5k.apps.googleusercontent.com
-              client-secret: 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
-              scope:
-                - email
-                - profile
-              redirect-uri: "http://localhost:8080/auth/login/oauth2/code/{registrationId}"
-              client-name: Google
-          provider:
-            google:
-              authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
-              token-uri: https://oauth2.googleapis.com/token
-              user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
-              user-name-attribute: sub
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 191769881724-uul9ik105o96q8eigu5rqaq9jq6n7aa9.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+            redirect-uri:  "{baseUrl}/login/oauth2/code/google"
 
+
+            client-name: Google
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
 
   datasource:
     url: jdbc:postgresql://localhost:5433/company
@@ -42,3 +43,21 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone:  http://localhost:8761/eureka
+
+
+#  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
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security.web: DEBUG
+    org.springframework.security.oauth2.client: DEBUG
+    org.springframework.security.oauth2.core: DEBUG
+    org.springframework.security.oauth2.client.web: DEBUG
+    org.springframework.security.oauth2.client.authentication: DEBUG
+
+server:
+  forward-headers-strategy: framework
